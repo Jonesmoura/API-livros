@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 //O parametro para conexão é a string gerada no mongoDB atlas 
 
-mongoose.connect("mongodb+srv://jonesms:mateus@cluster0.owdvrfk.mongodb.net/api-node-express");
+mongoose.connect(process.env.STRING_CONEXAO_DB);
 
 let db = mongoose.connection;
 
