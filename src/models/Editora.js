@@ -2,18 +2,18 @@ import mongoose from "mongoose";
 
 const EditoraSchema = mongoose.Schema(
 
-    {
-        id:{type:String},
-        nome:{type:String}
-    },
-    {
+  {
+    id:{type:String},
+    nome:{type:String}
+  },
+  {
 
-        versionKey:false
+    versionKey:false
 
-    }
+  }
 
-)
+);
 
-const editoras = mongoose.model("editoras", EditoraSchema)
+const editoras = mongoose.model("editoras", EditoraSchema);
 
 export default editoras;

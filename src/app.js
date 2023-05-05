@@ -1,17 +1,17 @@
-import express from 'express';
-import db from './config/dbConnect.js';
-import routes from './routes/index.js';
+import express from "express";
+import db from "./config/dbConnect.js";
+import routes from "./routes/index.js";
 
 // tratativa inicial erro 
-db.on('erro', console.log.bind(console,'Erro de conexão'));
+db.on("erro", console.log.bind(console,"Erro de conexão"));
 
 //tentativa inicial de conexão
 
-db.once('open', ()=> {
+db.once("open", ()=> {
 
-    console.log('Conexão com o banco feita com sucesso');
+  console.log("Conexão com o banco feita com sucesso");
 
-})
+});
 
 const app = express();
 
@@ -22,5 +22,5 @@ app.use(express.json());
 routes(app);
 
 
-export default app
+export default app;
 
