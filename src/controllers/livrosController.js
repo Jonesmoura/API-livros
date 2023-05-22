@@ -2,7 +2,7 @@ import livros from "../models/Livro.js";
 
 class LivroController {
 
-  static listarLivros = async (req,res)=> {
+  static listarLivros = async (req,res,next)=> {
 
     //utilizando método da biblioteca do mongoose
     try{
@@ -14,12 +14,12 @@ class LivroController {
 
     }catch(erro){
 
-      res.status(500).json({message:"Erro interno no servidor"});
+      next(erro);
 
     }
   };
 
-  static listarLivroID = async (req,res)=>{
+  static listarLivroID = async (req,res,next)=>{
 
     const id = req.params.id;
 
@@ -35,12 +35,12 @@ class LivroController {
 
     }catch(erro){
 
-      res.status(400).send({message: `${erro.message} - ID do livro não localizada`});
+      next(erro);
 
     }
   };
 
-  static cadastrarLivro = async(req,res) => {
+  static cadastrarLivro = async(req,res,next) => {
 
     try{
 
@@ -50,12 +50,12 @@ class LivroController {
 
     }catch(erro){
 
-      res.status(500).send({message: `${erro.message} - falha ao cadastrar livro.`});
+      next(erro);
 
     }
   };
 
-  static atualizarLivros = async (req, res)=>{
+  static atualizarLivros = async (req, res,next)=>{
 
     //utilizando método da biblioteca do mongoose
     
@@ -67,12 +67,12 @@ class LivroController {
 
     }catch(erro){
 
-      res.status(500).send({message: erro.message});
+      next(erro);
 
     }
   };
 
-  static excluirLivro = async (req,res)=>{
+  static excluirLivro = async (req,res,next)=>{
 
     //utilizando método da biblioteca do mongoose
     
@@ -84,12 +84,12 @@ class LivroController {
       
     }catch(erro){
 
-      res.status(500).send({message:erro.message});
+      next(erro);
 
     }
   };
 
-  static listarLivroPorEditora = async (req,res)=>{
+  static listarLivroPorEditora = async (req,res,next)=>{
     
     try{
       
@@ -99,7 +99,7 @@ class LivroController {
 
     }catch(erro){
 
-      res.status(404).send({message: `${erro.message} - ID da editora não localizado`});
+      next(erro);
 
     }
 

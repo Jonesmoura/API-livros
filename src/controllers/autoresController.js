@@ -11,30 +11,37 @@ class AutorController {
 
     }catch(erro){
 
-      res.status(500).json({message:"Erro interno no servidor"});
+      res.status(500).json({message:"Erro interno no servidor."});
 
     }
   };
 
-  static listarAutorID = async (req,res)=>{
+  static listarAutorID = async (req,res,next)=>{
 
     try{
       
       const id = req.params.id;
       const autoresResultado = await autores.findById(id);
-      res.status(200).json(autoresResultado);
 
-    } catch(erro){
+      if(autoresResultado !== null){
 
-      // so entra no catch se o formato do id estiver incorreto, se ele estiver com o formato ok e apenas for um id inexistente é retornado null.
+        res.status(200).json(autoresResultado);
 
-      res.status(400).send({message: `${erro.message} - ID do autor não localizada`});
+      }else{
+
+        res.status(404).send({message:"Id do Autor não localizado."});
+
+      }
+
+    }catch(erro){
+
+      next(erro);
 
     }
 
   };
 
-  static cadastrarAutor = async (req,res) => {
+  static cadastrarAutor = async (req,res,next) => {
     
     try{
       
@@ -44,12 +51,12 @@ class AutorController {
 
     }catch(erro){
 
-      res.status(500).send({message:`${erro.message} - falha ao cadastrar autor.`});
+      next(erro);
 
     }
   };
 
-  static atualizarAutores = async (req, res)=>{
+  static atualizarAutores = async (req, res,next)=>{
     
     try{
       
@@ -59,12 +66,12 @@ class AutorController {
 
     }catch(erro){
 
-      res.status(500).send({message: erro.message});
+      next(erro);
 
     }
   };
 
-  static excluirAutor = async (req,res)=>{
+  static excluirAutor = async (req,res,next)=>{
 
     try{
       
@@ -74,7 +81,7 @@ class AutorController {
 
     }catch(erro){
 
-      res.status(500).send({message:erro.message});
+      next(erro);
 
     }
   };

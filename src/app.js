@@ -1,6 +1,7 @@
 import express from "express";
 import db from "./config/dbConnect.js";
 import routes from "./routes/index.js";
+import manipuladorDeErros from "./middlewares/manipuladorDeErros.js";
 
 // tratativa inicial erro 
 db.on("erro", console.log.bind(console,"Erro de conexão"));
@@ -21,6 +22,8 @@ app.use(express.json());
 
 routes(app);
 
+// eslint-disable-next-line no-unused-vars
+app.use(manipuladorDeErros);
 
 export default app;
 
