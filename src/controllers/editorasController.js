@@ -1,3 +1,4 @@
+import NaoEncontrado from "../erros/NaoEncontrado.js";
 import editoras from "../models/Editora.js";
 
 class EditoraController {
@@ -17,22 +18,31 @@ class EditoraController {
     }
   };
 
-  static listarEditoraID = async (req,res)=>{
+  static listarEditoraID = async (req,res,next)=>{
     
     try{
       
       const id = req.params.id;
       const editoraResultado = await editoras.findById(id);
-      res.status(200).send(editoraResultado);
+      
+      if(editoraResultado !== null){
+        
+        res.status(200).send(editoraResultado);
+
+      }else{
+
+        next(new NaoEncontrado("id da Editora não localizado."));
+
+      }
 
     }catch(erro){
 
-      res.status(400).send({message: `${erro.message} - ID da editora não localizado`});
+      next(erro);
 
     }
   };
 
-  static cadastrarEditora = async (req,res) => {
+  static cadastrarEditora = async (req,res,next) => {
 
     
     try{
@@ -43,37 +53,56 @@ class EditoraController {
 
     }catch(erro){
 
-      res.status(500).send({message:`${erro.message} - falha ao cadastrar editora.`});
+      next(erro);
 
     }
   };
 
-  static atualizarEditoras = async(req, res)=>{
+  static atualizarEditoras = async(req, res,next)=>{
 
     try{
       
       const id = req.params.id;
-      await editoras.findByIdAndUpdate(id,{$set:req.body});
-      res.status(200).send({message:"Editora atualizada com sucesso"});
+      const retornoEditoras = await editoras.findByIdAndUpdate(id,{$set:req.body});
+      
+      if(retornoEditoras === null){
+
+        next(new NaoEncontrado("Id da editora não localizado"));
+
+      }else{
+
+        res.status(200).send({message:"Editora atualizada com sucesso"});
+
+      }   
     
     }catch(erro){
 
-      res.status(500).send({message:erro.message});
+      next(erro);
 
     }
   };
 
-  static excluirEditora = async (req,res)=>{
+  static excluirEditora = async (req,res,next)=>{
     
     try{
       
       const id = req.params.id;
-      await editoras.findByIdAndDelete(id);
-      res.status(200).send({message:"Editora removida com sucesso"});
+      const retornoEditoras = await editoras.findByIdAndDelete(id);
+
+      if(retornoEditoras === null){
+
+        next(new NaoEncontrado("Id da Editora não localizado"));
+
+      }else{
+
+        res.status(200).send({message:"Editora removida com sucesso"});
+
+      }
+
 
     }catch(erro){
 
-      res.status(500).send({message:erro.message});
+      next(erro);
       
     }
 
