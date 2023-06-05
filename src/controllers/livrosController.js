@@ -1,6 +1,5 @@
 import NaoEncontrado from "../erros/NaoEncontrado.js";
 import { autores, livros } from "../models/index.js";
-
 class LivroController {
 
   static listarLivros = async (req,res,next)=> {
@@ -8,10 +7,10 @@ class LivroController {
     //utilizando método da biblioteca do mongoose
     try{
 
-      const livrosResultado = await livros.find()
-        .populate("autor")
-        .exec();
-      res.status(200).json(livrosResultado);
+      const buscaLivros = livros.find();
+      req.resultado = buscaLivros;
+      next();
+
 
     }catch(erro){
 
@@ -24,13 +23,12 @@ class LivroController {
 
     const id = req.params.id;
 
-    //utilizando método da biblioteca do mongoose
-
     try{
 
-      const livrosResultado = await livros.findById(id)
-        .populate("autor","nome").populate("editora", "nome")
-        .exec();
+      // desativando o autopopulate e criando populate manual
+      const livrosResultado = await livros
+        .findById(id,{}, {autopopulate:false})
+        .populate("autor","nome");
 
       if( livrosResultado !== null){
 
@@ -41,8 +39,6 @@ class LivroController {
         next(new NaoEncontrado("Id do Livro não localizado."));
 
       }
-
-      
 
     }catch(erro){
 
@@ -85,7 +81,6 @@ class LivroController {
 
       }
       
-
     }catch(erro){
 
       next(erro);
@@ -127,17 +122,15 @@ class LivroController {
 
       if(busca !== null){
 
-        const livrosResultado = await livros
-          .find(busca)
-          .populate("autor");
-        res.status(200).send(livrosResultado);
+        const livrosResultado = livros.find(busca);
+        req.resultado = livrosResultado;
+        next();
 
       }else{
 
         res.status(200).send([]);
 
       }
-
 
     }catch(erro){
 
@@ -168,7 +161,7 @@ async function processaBusca(parametros){
 
   }else if(maxPaginas){
 
-    busca.numeroPaginas = { $lte:maxPaginas};
+    busca.numeroPaginas = {$lte:maxPaginas};
     
   }else if(minPaginas){
 
