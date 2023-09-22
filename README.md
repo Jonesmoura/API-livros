@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-CRUD simples de livros, autores e editoras.
+CRUD de livros, autores e editoras.
 
 ## Arquitetura Utilizada
 
